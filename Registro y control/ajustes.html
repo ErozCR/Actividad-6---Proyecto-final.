@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: white;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: rgb(21, 21, 85);
+        }
+
+
+        .date {
+            text-align: right;
+            margin-right: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            /* Para que la sombra no se extienda más allá del contenedor */
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #2196f3;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .submit-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .add-button {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 15px;
+
+        }
+
+        .color {
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: auto;
+            padding: 10px 20px;
+            /* Espaciado interno */
+            background: linear-gradient(30deg, blue, skyblue, royalblue, azure, blue);
+        }
+
+
+
+        a {
+            text-decoration: none;
+            text-decoration-color: blanchedalmond;
+        }
+
+        nav ul li {
+            list-style-type: none;
+            display: flex;
+            transition: 0.5s all;
+            padding: 10px 10px;
+            font-size: 16px;
+        }
+
+        nav ul li:hover {
+            background-color: white;
+            /*cuando paso por un elemento cambia de color en transicion*/
+            border-radius: 30px;
+        }
+
+        .img-logo {
+            max-width: 100px;
+            /* Ancho máximo de la imagen del logo */
+            height: auto;
+            /* Altura ajustada automáticamente */
+        }
+
+        nav ul {
+
+            display: inline-flex;
+            position: relative;
+
+        }
+        
+
+    </style>
+    <title>Formulario para Gestión de Inventarios</title>
+
+</head>
+
+<head>
+    <nav>
+        <a href="./index.html"><img src="./imagenes/logo akt.png" class="img-logo" alt="logo"></a>
+        <ul>
+            <li><a href="./index.html">Inicio</a></li>
+            <li><a href="./rc_usuarios/registro_usuarios.php">Registro Usuarios</a></li>
+            <li><a href="./rc_usuarios/info_usuarios.php">Info Usuarios</a></li>
+            <li class="cerrar-sesion"><a href="./rc_usuarios/inicio_sesion.php">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1 class="color">Formato para Gestión de Inventarios</h1>
+        <div class="date" id="current-date">Fecha: </div>
+    </div>
+    <br>
+    <div class="container">
+        <table class="table">
+            <tr>
+                <th>Unidad de Negocio</th>
+                <th>Artículo</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Costo Unitario</th>
+                <th>Costo Total</th>
+                <th>No. Reporte</th>
+                <th>Accion</th>
+            </tr>
+            <tr>
+                <td><select>
+                        <option value="MOTOS">MOTOS</option>
+                        <option value="MOALP">MOALP</option>
+
+                    </select></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td><button class="delete-button" onclick="deleteRow(this)">Eliminar</button></td>
+            </tr>
+            <tr id="new-row-template" style="display: none;">
+                <td><select>
+                        <option value="MOTOS">MOTOS</option>
+                        <option value="MOALP">MOALP</option>
+
+                    </select></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td><button class="delete-button" onclick="deleteRow(this)">Eliminar</button></td>
+            </tr>
+        </table>
+        <div class="buttons">
+            <button class="add-button" onclick="addNewRow()">Añadir Nuevo Registro</button>
+            <button class="submit-button">Enviar Información</button>
+        </div>
+    </div>
+
+    <script>
+        function addNewRow() {
+            const newRowTemplate = document.getElementById("new-row-template");
+            const newRow = newRowTemplate.cloneNode(true);
+            newRow.removeAttribute("id");
+            newRow.style.display = "table-row";
+            const table = document.querySelector("table");
+            table.appendChild(newRow);
+        }
+
+        function deleteRow(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+    </script>
+
+    <script>
+        const currentDateElement = document.getElementById("current-date");
+        const currentDate = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = currentDate.toLocaleDateString('es-ES', options);
+        currentDateElement.textContent = `Fecha: ${formattedDate}`;
+    </script>
+
+</body>
+
+</html>
